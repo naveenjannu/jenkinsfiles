@@ -1,0 +1,59 @@
+@Library('mylibrary')_
+pipeline
+{
+    agent any
+    stages
+    {
+        stage('download')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.gitdownload("Maven")
+                }
+            }
+        }
+        stage('build')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.buildartifact()
+                }
+            }
+        }
+        stage('deploy')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.deploy("declarative_pipeline","172.31.17.48","test")
+                }
+            }
+        }
+        stage('testing')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.gitdownload("functional_testing")
+                    cicd.executeselenium("declarative_pipeline")
+                }
+            }
+        }
+        stage('delivery')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.deploy("declarative_pipeline","172.31.20.29","prod")
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@Library('naveenlibrary')_
+node('built-in')
+{
+    stage('download')
+    {
+        cicd.gitdownload("Maven")
+    }
+    stage('build')
+    {
+        cicd.buildartifact()
+    }
+    stage('deploy')
+    {
+        cicd.deploy("scriptedpipeline","172.31.17.48","aaa")
+    }
+    stage('testing')
+    {
+        cicd.gitdownload("functional_testing")
+        cicd.executeselenium("scriptedpipeline")
+    }
+    stage('delivery')
+    {
+        cicd.deploy("scriptedpipeline","172.31.20.29","bbb")
+    }
+}
